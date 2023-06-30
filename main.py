@@ -16,6 +16,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 GREEN = (30, 141, 68)
 GOLD = (255, 215, 0)
+DULL_YELLOW = (128, 128, 0)
 
 BORDER = pygame.Rect(WIDTH//2 - 5, 0, 10, HEIGHT)
 
@@ -24,6 +25,7 @@ BULLET_HIT_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'ImpactEffect.mp3')
 BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'LaserEffect.mp3'))
 
 HEALTH_FONT = pygame.font.SysFont('consolas', 40)
+HEALTH_FONT_BG = pygame.font.SysFont('consolas', 41, True)
 WINNER_FONT = pygame.font.SysFont('consolas', 100)
 
 FPS = 60
@@ -58,11 +60,18 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
     WIN.blit(SPACE, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
 
+    red_health_text_bg = HEALTH_FONT_BG.render(
+        "Health", 1, RED)
     red_health_text = HEALTH_FONT.render(
-        "Health: " + str(red_health), 1, GREEN)
+        "Health: " + str(red_health), 1, WHITE)
+    yellow_health_text_bg = HEALTH_FONT_BG.render(
+        "Health", 1, DULL_YELLOW)   
     yellow_health_text = HEALTH_FONT.render(
-        "Health: " + str(yellow_health), 1, GREEN)
+        "Health: " + str(yellow_health), 1, WHITE)
+
+    WIN.blit(red_health_text_bg, (WIDTH - red_health_text.get_width() - 12, 10))
     WIN.blit(red_health_text, (WIDTH - red_health_text.get_width() - 10, 10))
+    WIN.blit(yellow_health_text_bg, (8, 10))
     WIN.blit(yellow_health_text, (10, 10))
 
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
