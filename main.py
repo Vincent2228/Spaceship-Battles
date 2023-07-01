@@ -40,7 +40,7 @@ SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
 
 # control the speed of the spaceships/bullets and the amount of bullets a spaceship can shoot at a time
 VELOCITY = 5
-BULLET_VELOCITY = 7
+BULLET_VELOCITY = 12
 MAX_BULLETS = 3
 
 YELLOW_HIT = pygame.USEREVENT + 1
@@ -126,12 +126,32 @@ def draw_instructions():
     WIN.blit(player2_movement, (WIDTH//2+10, 280 + player2.get_height()))
     WIN.blit(player2_shooting, (WIDTH//2+10, 340 + player2.get_height() + player2_movement.get_height()))
     WIN.blit(continue_text, (WIDTH//2-continue_text.get_width()//2, HEIGHT-continue_text.get_height()-10))
-    
 
     pygame.display.update()
 
-def draw_end_screen():
+def draw_end_screen(red_health, yellow_health):
     WIN.blit(SPACE, (0, 0))
+    pygame.draw.rect(WIN, BLACK, BORDER)
+
+    darkener = pygame.Surface((WIDTH, HEIGHT))
+    darkener.set_alpha(128)
+    darkener.fill(BLACK)
+
+    final_score_text = TITLE_FONT.render("Final Score", 1, WHITE)
+    score_text = TITLE_FONT.render(str(yellow_health) + " - " + str(red_health), 1, WHITE)
+    restart_text = TITLE_FONT.render("RESTART", 1, GREEN)
+    quit_text = TITLE_FONT.render("QUIT", 1, RED)
+
+    WIN.blit(darkener, (0,0))
+    WIN.blit(final_score_text, (WIDTH//2-final_score_text.get_width()//2, 10))
+    WIN.blit(score_text, (WIDTH//2-score_text.get_width()//2, final_score_text.get_height()+60))
+
+    pygame.draw.rect(WIN, GREEN, (75, 250, 300, 125), 5)
+    pygame.draw.rect(WIN, RED, (WIDTH-375, 250, 300, 125), 5)
+    WIN.blit(restart_text, (225-restart_text.get_width()//2, 313-restart_text.get_height()//2))
+    WIN.blit(quit_text, (WIDTH-225-quit_text.get_width()//2, 313-restart_text.get_height()//2))
+
+    pygame.display.update()
 
 
 
@@ -139,13 +159,11 @@ def draw_end_screen():
 def yellow_handle_movement(keys_pressed, yellow):
     if keys_pressed[pygame.K_a] and (yellow.x - VELOCITY > 0):  # LEFT
         yellow.x -= VELOCITY
-    # RIGHT
-    if keys_pressed[pygame.K_d] and (yellow.x + VELOCITY + yellow.width < BORDER.x):
+    if keys_pressed[pygame.K_d] and (yellow.x + VELOCITY + yellow.width < BORDER.x):  # RIGHT
         yellow.x += VELOCITY
     if keys_pressed[pygame.K_w] and (yellow.y - VELOCITY > 0):  # UP
         yellow.y -= VELOCITY
-    # DOWN
-    if keys_pressed[pygame.K_s] and (yellow.y + VELOCITY + yellow.height < HEIGHT - 15):
+    if keys_pressed[pygame.K_s] and (yellow.y + VELOCITY + yellow.height < HEIGHT - 15):  # DOWN
         yellow.y += VELOCITY
 
 
@@ -200,9 +218,12 @@ def main():
     red_health = 10
     yellow_health = 10
 
-    instruct = True
+    instruct = False
     run = False
+    end = True
+
     clock = pygame.time.Clock()
+    winner_text = ""
     
     BACKGROUND_MUSIC.play()
     
@@ -225,6 +246,9 @@ def main():
     while run:
 
         clock.tick(FPS)
+
+        red_health = 10
+        yellow_health = 10
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -261,9 +285,9 @@ def main():
             winner_text = "RED WINS"
 
         if winner_text != "":
-            draw_winner(winner_text)
-            BACKGROUND_MUSIC.stop()
-            break
+            # BACKGROUND_MUSIC.stop()
+            run = False
+            end = True
 
         print(red_bullets, yellow_bullets)
         keys_pressed = pygame.key.get_pressed()
@@ -275,7 +299,27 @@ def main():
         draw_window(red, yellow, red_bullets, yellow_bullets,
                     red_health, yellow_health)
 
-    main()
+    while end:
+
+        clock.tick(FPS)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                end = False
+                pygame.quit()
+            
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+
+                if pos[0]>=75 and pos[0]<=375 and pos[1]>=250 and pos[1]<=375:
+                    end = False
+                    run = True
+                
+                if pos[0]>=(WIDTH-375) and pos[0]<=(WIDTH-75) and pos[1]>=250 and pos[1]<=375:
+                    end = False
+                    pygame.quit()
+
+        draw_end_screen(0,0)
 
 
 if __name__ == "__main__":
