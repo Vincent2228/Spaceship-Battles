@@ -218,108 +218,109 @@ def main():
     red_health = 10
     yellow_health = 10
 
-    instruct = False
+    instruct = True
     run = False
-    end = True
+    end = False
+    my_quit = False
 
     clock = pygame.time.Clock()
     winner_text = ""
     
     BACKGROUND_MUSIC.play()
+
+    while not my_quit:
     
-    while instruct:
+        while instruct:
 
-        clock.tick(FPS)
+            clock.tick(FPS)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-            
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    instruct = False
-                    run = True
-        
-        draw_instructions()
-    
-    while run:
-
-        clock.tick(FPS)
-
-        red_health = 10
-        yellow_health = 10
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.quit()
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
-                    bullet = pygame.Rect(
-                        yellow.x + yellow.width, yellow.y + yellow.height//2 - 2, 10, 5)
-                    yellow_bullets.append(bullet)
-                    BULLET_FIRE_SOUND.play()
-
-                if event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
-                    bullet = pygame.Rect(
-                        red.x, red.y + red.height//2 - 2, 10, 5)
-                    red_bullets.append(bullet)
-                    BULLET_FIRE_SOUND.play()
-
-            if event.type == RED_HIT:
-                red_health -= 1
-                BULLET_HIT_SOUND.play()
-
-            if event.type == YELLOW_HIT:
-                yellow_health -= 1
-                BULLET_HIT_SOUND.play()
-
-        winner_text = ""
-
-        if red_health <= 0:
-            winner_text = "YELLOW WINS"
-
-        if yellow_health <= 0:
-            winner_text = "RED WINS"
-
-        if winner_text != "":
-            # BACKGROUND_MUSIC.stop()
-            run = False
-            end = True
-
-        print(red_bullets, yellow_bullets)
-        keys_pressed = pygame.key.get_pressed()
-        yellow_handle_movement(keys_pressed, yellow)
-        red_handle_movement(keys_pressed, red)
-
-        handle_bullets(yellow_bullets, red_bullets, yellow, red)
-
-        draw_window(red, yellow, red_bullets, yellow_bullets,
-                    red_health, yellow_health)
-
-    while end:
-
-        clock.tick(FPS)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                end = False
-                pygame.quit()
-            
-            if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
-
-                if pos[0]>=75 and pos[0]<=375 and pos[1]>=250 and pos[1]<=375:
-                    end = False
-                    run = True
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+                    pygame.quit()
                 
-                if pos[0]>=(WIDTH-375) and pos[0]<=(WIDTH-75) and pos[1]>=250 and pos[1]<=375:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        instruct = False
+                        run = True
+            
+            draw_instructions()
+        
+        while end:
+
+            clock.tick(FPS)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     end = False
                     pygame.quit()
+                
+                if event.type == pygame.MOUSEBUTTONUP:
+                    pos = pygame.mouse.get_pos()
 
-        draw_end_screen(0,0)
+                    if pos[0]>=75 and pos[0]<=375 and pos[1]>=250 and pos[1]<=375:
+                        end = False
+                        run = True
+                        red_health = yellow_health = 10
+                    
+                    if pos[0]>=(WIDTH-375) and pos[0]<=(WIDTH-75) and pos[1]>=250 and pos[1]<=375:
+                        end = False
+                        my_quit = True
+
+            draw_end_screen(red_health, yellow_health)
+
+        while run:
+
+            clock.tick(FPS)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+                    pygame.quit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
+                        bullet = pygame.Rect(
+                            yellow.x + yellow.width, yellow.y + yellow.height//2 - 2, 10, 5)
+                        yellow_bullets.append(bullet)
+                        BULLET_FIRE_SOUND.play()
+
+                    if event.key == pygame.K_RCTRL and len(red_bullets) < MAX_BULLETS:
+                        bullet = pygame.Rect(
+                            red.x, red.y + red.height//2 - 2, 10, 5)
+                        red_bullets.append(bullet)
+                        BULLET_FIRE_SOUND.play()
+
+                if event.type == RED_HIT:
+                    red_health -= 1
+                    BULLET_HIT_SOUND.play()
+
+                if event.type == YELLOW_HIT:
+                    yellow_health -= 1
+                    BULLET_HIT_SOUND.play()
+
+            winner_text = ""
+
+            if red_health <= 0:
+                winner_text = "YELLOW WINS"
+
+            if yellow_health <= 0:
+                winner_text = "RED WINS"
+
+            if winner_text != "":
+                # BACKGROUND_MUSIC.stop()
+                run = False
+                end = True
+
+            print(red_bullets, yellow_bullets)
+            keys_pressed = pygame.key.get_pressed()
+            yellow_handle_movement(keys_pressed, yellow)
+            red_handle_movement(keys_pressed, red)
+
+            handle_bullets(yellow_bullets, red_bullets, yellow, red)
+
+            draw_window(red, yellow, red_bullets, yellow_bullets,
+                        red_health, yellow_health)
 
 
 if __name__ == "__main__":
