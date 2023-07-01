@@ -130,6 +130,11 @@ def draw_instructions():
 
     pygame.display.update()
 
+def draw_end_screen():
+    WIN.blit(SPACE, (0, 0))
+
+
+
 # updates the movement of the yellow ship
 def yellow_handle_movement(keys_pressed, yellow):
     if keys_pressed[pygame.K_a] and (yellow.x - VELOCITY > 0):  # LEFT
@@ -226,8 +231,8 @@ def main():
                 run = False
                 pygame.quit()
 
-            if event.type == pygame.KEYDOWN and len(yellow_bullets) < MAX_BULLETS:
-                if event.key == pygame.K_LCTRL:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LCTRL and len(yellow_bullets) < MAX_BULLETS:
                     bullet = pygame.Rect(
                         yellow.x + yellow.width, yellow.y + yellow.height//2 - 2, 10, 5)
                     yellow_bullets.append(bullet)
