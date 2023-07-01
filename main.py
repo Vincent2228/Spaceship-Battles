@@ -17,6 +17,10 @@ YELLOW = (255, 255, 0)
 GREEN = (30, 141, 68)
 GOLD = (255, 215, 0)
 DULL_YELLOW = (128, 128, 0)
+ORANGE = (247, 147, 39)
+PLAYER_YELLOW = (255, 229, 105)
+PLAYER_RED = (183, 4, 4)
+CONTINUE_COLOR = (37, 186, 67)
 
 BORDER = pygame.Rect(WIDTH//2 - 5, 0, 10, HEIGHT)
 
@@ -26,7 +30,10 @@ BULLET_FIRE_SOUND = pygame.mixer.Sound(os.path.join('Assets', 'LaserEffect.mp3')
 
 HEALTH_FONT = pygame.font.SysFont('consolas', 40)
 HEALTH_FONT_BG = pygame.font.SysFont('consolas', 41, True)
+TITLE_FONT = pygame.font.SysFont('consolas', 55)
+INSTRUCTION_TEXT = pygame.font.SysFont('consolas', 25)
 WINNER_FONT = pygame.font.SysFont('consolas', 100)
+CONTROLS_FONT = pygame.font.SysFont('consolas', 25)
 
 FPS = 60
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
@@ -53,6 +60,8 @@ RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
 
 SPACE = pygame.transform.scale(pygame.image.load(
     os.path.join('Assets', 'space2.jpg')), (WIDTH, HEIGHT))
+SPACE2 = pygame.transform.scale(pygame.image.load(
+    os.path.join('Assets', 'space3.png')), (WIDTH, HEIGHT))
 
  
 # draw_window function that will draw all the assets and their position on the screen. Updates the display at the end of the function
@@ -85,6 +94,41 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
 
     pygame.display.update()
 
+def draw_instructions():
+    WIN.blit(SPACE2, (0, 0))
+    darkener = pygame.Surface((WIDTH, HEIGHT))
+    darkener.set_alpha(128)
+    darkener.fill(BLACK)
+
+    title_text = TITLE_FONT.render(
+        "Spaceship Battles", 1, ORANGE)
+
+    welcome_text1 = INSTRUCTION_TEXT.render("Welcome to outer space! Get ready to battle with a friend. Each", 1, WHITE)
+    welcome_text2 = INSTRUCTION_TEXT.render("player will control a spaceship and shoot their bullets at the", 1, WHITE)
+    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person who's health first reaches 0 loses!", 1, WHITE)
+    player1 = HEALTH_FONT.render("Player 1:", 1, PLAYER_YELLOW)
+    player2 = HEALTH_FONT.render("Player 2:", 1, PLAYER_RED)
+    player1_movement = CONTROLS_FONT.render("W, A, S, D  - Move Spaceship", 1, WHITE)
+    player1_shooting = CONTROLS_FONT.render("Left CTRL   - Shoot Bullet", 1, WHITE)
+    player2_movement = CONTROLS_FONT.render("ARROW keys  - Move Spaceship", 1, WHITE)
+    player2_shooting = CONTROLS_FONT.render("Right CTRL  - Shoot Bullet", 1, WHITE)
+    continue_text = INSTRUCTION_TEXT.render("Press ENTER to continue...", 1, CONTINUE_COLOR)
+
+    WIN.blit(darkener, (0,0))
+    WIN.blit(title_text, (WIDTH//2-title_text.get_width()//2, 10))
+    WIN.blit(welcome_text1, (10, title_text.get_height()+50))
+    WIN.blit(welcome_text2, (10, title_text.get_height()+welcome_text1.get_height()+60))
+    WIN.blit(welcome_text3, (10, title_text.get_height()+welcome_text1.get_height()+welcome_text2.get_height()+70))
+    WIN.blit(player1, (10, 250))
+    WIN.blit(player2, (WIDTH//2+10, 250))
+    WIN.blit(player1_movement, (10, 280 + player1.get_height()))
+    WIN.blit(player1_shooting, (10, 340 + player1.get_height() + player1_movement.get_height()))
+    WIN.blit(player2_movement, (WIDTH//2+10, 280 + player2.get_height()))
+    WIN.blit(player2_shooting, (WIDTH//2+10, 340 + player2.get_height() + player2_movement.get_height()))
+    WIN.blit(continue_text, (WIDTH//2-continue_text.get_width()//2, HEIGHT-continue_text.get_height()-10))
+    
+
+    pygame.display.update()
 
 # updates the movement of the yellow ship
 def yellow_handle_movement(keys_pressed, yellow):
@@ -151,10 +195,27 @@ def main():
     red_health = 10
     yellow_health = 10
 
-    run = True
+    instruct = True
+    run = False
     clock = pygame.time.Clock()
     
     BACKGROUND_MUSIC.play()
+    
+    while instruct:
+
+        clock.tick(FPS)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                pygame.quit()
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    instruct = False
+                    run = True
+        
+        draw_instructions()
     
     while run:
 
