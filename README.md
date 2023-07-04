@@ -15,6 +15,7 @@ zip file to include all the dependencies (make sure everything stays within one 
 in an IDE. Run ```main.py``` and a window with the game pops up. Enjoy!
 
 ## Reflection
-This is one of my first personal projects (or at least one of the first finished ones), and I really enjoyed working on it! ```Add pygame library reflection here (a more technical reflection)```
-
-I have always loved video games and have wanted to develop one for a long time. I hope you enjoy playing it!
+This is one of my first personal projects (or at least one of the first finished ones), and I really enjoyed working on it.
+Pygame is a great library and I thought it was quite simple to work with. The assets were easy to work with and the key events were
+very intuitive. Overall I think pygame is a great tool for developers and I will definitely be learning more about it and using it in
+the future. Overall, I have always loved video games and have wanted to develop one for a long time. I hope you enjoy playing it!
