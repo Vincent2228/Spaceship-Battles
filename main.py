@@ -38,7 +38,7 @@ WINNER_FONT = pygame.font.SysFont("consolas", 100)
 CONTROLS_FONT = pygame.font.SysFont("consolas", 25)
 
 FPS = 60
-YELLOW_SPACESHIP_WIDTH, YELLOW_SPACESHIP_HEIGHT = 65, 50
+YELLOW_SPACESHIP_WIDTH, YELLOW_SPACESHIP_HEIGHT = 75, 60
 RED_SPACESHIP_WIDTH, RED_SPACESHIP_HEIGHT = 65, 50
 
 # control the speed of the spaceships/bullets and the amount of bullets spaceships can shoot at a time
