@@ -38,7 +38,7 @@ CONTROLS_FONT = pygame.font.SysFont('consolas', 25)
 FPS = 60
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
 
-# control the speed of the spaceships/bullets and the amount of bullets a spaceship can shoot at a time
+# control the speed of the spaceships/bullets and the amount of bullets spaceships can shoot at a time
 VELOCITY = 5
 BULLET_VELOCITY = 12
 MAX_BULLETS = 3
@@ -94,6 +94,8 @@ def draw_window(red, yellow, red_bullets, yellow_bullets, red_health, yellow_hea
 
     pygame.display.update()
 
+
+# draws the instruction screen containing the controls 
 def draw_instructions():
     WIN.blit(SPACE2, (0, 0))
     darkener = pygame.Surface((WIDTH, HEIGHT))
@@ -105,7 +107,7 @@ def draw_instructions():
 
     welcome_text1 = INSTRUCTION_TEXT.render("Welcome to outer space! Get ready to battle with a friend. Each", 1, WHITE)
     welcome_text2 = INSTRUCTION_TEXT.render("player will control a spaceship and shoot their bullets at the", 1, WHITE)
-    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person whose health first reaches 0 loses!", 1, WHITE)
+    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person who's health first reaches 0 loses!", 1, WHITE)
     player1 = HEALTH_FONT.render("Player 1:", 1, PLAYER_YELLOW)
     player2 = HEALTH_FONT.render("Player 2:", 1, PLAYER_RED)
     player1_movement = CONTROLS_FONT.render("W, A, S, D  - Move Spaceship", 1, WHITE)
@@ -129,7 +131,9 @@ def draw_instructions():
 
     pygame.display.update()
 
-def draw_end_screen(red_health, yellow_health):
+
+#draws the end screen containing the player's scores
+def draw_end_screen(red_health, yellow_health, red, yellow):
     WIN.blit(SPACE, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
 
@@ -139,20 +143,31 @@ def draw_end_screen(red_health, yellow_health):
 
     final_score_text = TITLE_FONT.render("Final Score", 1, WHITE)
     score_text = TITLE_FONT.render(str(yellow_health) + " - " + str(red_health), 1, WHITE)
+
+    score_text1 = TITLE_FONT.render(str(yellow_health), 1, PLAYER_YELLOW)
+    score_text2 = TITLE_FONT.render("-", 1, WHITE)
+    score_text3 = TITLE_FONT.render(str(red_health), 1, PLAYER_RED)
+
     restart_text = TITLE_FONT.render("RESTART", 1, GREEN)
     quit_text = TITLE_FONT.render("QUIT", 1, RED)
 
     WIN.blit(darkener, (0,0))
     WIN.blit(final_score_text, (WIDTH//2-final_score_text.get_width()//2, 10))
-    WIN.blit(score_text, (WIDTH//2-score_text.get_width()//2, final_score_text.get_height()+60))
+    WIN.blit(score_text1, (WIDTH//2-score_text.get_width()//2-15, final_score_text.get_height()+60))
+    WIN.blit(score_text2, (WIDTH//2-score_text.get_width()//2+75, final_score_text.get_height()+60))
+    WIN.blit(score_text3, (WIDTH//2-score_text.get_width()//2+165, final_score_text.get_height()+60))
 
     pygame.draw.rect(WIN, GREEN, (75, 250, 300, 125), 5)
     pygame.draw.rect(WIN, RED, (WIDTH-375, 250, 300, 125), 5)
     WIN.blit(restart_text, (225-restart_text.get_width()//2, 313-restart_text.get_height()//2))
     WIN.blit(quit_text, (WIDTH-225-quit_text.get_width()//2, 313-restart_text.get_height()//2))
 
-    pygame.display.update()
+    red.x = 700
+    red.y = 300
+    yellow.x = 100
+    yellow.y = 300
 
+    pygame.display.update()
 
 
 # updates the movement of the yellow ship
@@ -182,6 +197,7 @@ def red_handle_movement(keys_pressed, red):
         red.y += VELOCITY
 
 
+#handles the movements and collision of the bullets
 def handle_bullets(yellow_bullets, red_bullets, yellow, red):
     for bullet in yellow_bullets:
         bullet.x += BULLET_VELOCITY
@@ -198,13 +214,6 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
             red_bullets.remove(bullet)
         elif bullet.x < 0:
             red_bullets.remove(bullet)
-
-
-def draw_winner(text):
-    draw_text = WINNER_FONT.render(text, 1, GOLD)
-    WIN.blit(draw_text, (WIDTH//2 - draw_text.get_width()//2, HEIGHT//2 - draw_text.get_height()//2))
-    pygame.display.update()
-    pygame.time.delay(5000)
 
 
 # main function that will start the game and keep it running until user exits
@@ -226,6 +235,10 @@ def main():
     clock = pygame.time.Clock()
     winner_text = ""
     
+    # adjust volume for the sound effects and music
+    BACKGROUND_MUSIC.set_volume(0.7)
+    BULLET_FIRE_SOUND.set_volume(0.7)
+    BULLET_HIT_SOUND.set_volume(0.7)
     BACKGROUND_MUSIC.play()
 
     while not my_quit:
@@ -267,7 +280,8 @@ def main():
                         end = False
                         my_quit = True
 
-            draw_end_screen(red_health, yellow_health)
+
+            draw_end_screen(red_health, yellow_health, red, yellow)
 
         while run:
 
@@ -308,9 +322,9 @@ def main():
                 winner_text = "RED WINS"
 
             if winner_text != "":
-                # BACKGROUND_MUSIC.stop()
                 run = False
                 end = True
+
 
             keys_pressed = pygame.key.get_pressed()
             yellow_handle_movement(keys_pressed, yellow)
