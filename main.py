@@ -36,7 +36,8 @@ WINNER_FONT = pygame.font.SysFont('consolas', 100)
 CONTROLS_FONT = pygame.font.SysFont('consolas', 25)
 
 FPS = 60
-SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
+YELLOW_SPACESHIP_WIDTH, YELLOW_SPACESHIP_HEIGHT = 65, 50
+RED_SPACESHIP_WIDTH, RED_SPACESHIP_HEIGHT = 65, 50
 
 # control the speed of the spaceships/bullets and the amount of bullets spaceships can shoot at a time
 VELOCITY = 5
@@ -51,12 +52,12 @@ RED_HIT = pygame.USEREVENT + 2
 YELLOW_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join('Assets', 'spaceship_yellow.png'))
 YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
-    YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 90)
+    YELLOW_SPACESHIP_IMAGE, (YELLOW_SPACESHIP_WIDTH, YELLOW_SPACESHIP_HEIGHT)), 270)
 
 RED_SPACESHIP_IMAGE = pygame.image.load(
     os.path.join('Assets', 'spaceship_red.png'))
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
-    RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 270)
+    RED_SPACESHIP_IMAGE, (RED_SPACESHIP_WIDTH, RED_SPACESHIP_HEIGHT)), 90)
 
 SPACE = pygame.transform.scale(pygame.image.load(
     os.path.join('Assets', 'space2.jpg')), (WIDTH, HEIGHT))
@@ -107,7 +108,7 @@ def draw_instructions():
 
     welcome_text1 = INSTRUCTION_TEXT.render("Welcome to outer space! Get ready to battle with a friend. Each", 1, WHITE)
     welcome_text2 = INSTRUCTION_TEXT.render("player will control a spaceship and shoot their bullets at the", 1, WHITE)
-    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person whose health first reaches 0 loses!", 1, WHITE)
+    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person who's health first reaches 0 loses!", 1, WHITE)
     player1 = HEALTH_FONT.render("Player 1:", 1, PLAYER_YELLOW)
     player2 = HEALTH_FONT.render("Player 2:", 1, PLAYER_RED)
     player1_movement = CONTROLS_FONT.render("W, A, S, D  - Move Spaceship", 1, WHITE)
@@ -144,12 +145,18 @@ def draw_end_screen(red_health, yellow_health, red, yellow):
     final_score_text = TITLE_FONT.render("Final Score", 1, WHITE)
     score_text = TITLE_FONT.render(str(yellow_health) + " - " + str(red_health), 1, WHITE)
 
+    score_text1 = TITLE_FONT.render(str(yellow_health), 1, PLAYER_YELLOW)
+    score_text2 = TITLE_FONT.render("-", 1, WHITE)
+    score_text3 = TITLE_FONT.render(str(red_health), 1, PLAYER_RED)
+
     restart_text = TITLE_FONT.render("RESTART", 1, GREEN)
     quit_text = TITLE_FONT.render("QUIT", 1, RED)
 
     WIN.blit(darkener, (0,0))
     WIN.blit(final_score_text, (WIDTH//2-final_score_text.get_width()//2, 10))
-    WIN.blit(score_text, (WIDTH//2-score_text.get_width()//2, final_score_text.get_height()+60))
+    WIN.blit(score_text1, (WIDTH//2-score_text.get_width()//2- 15, final_score_text.get_height()+60))
+    WIN.blit(score_text2, (WIDTH//2-score_text.get_width()//2+ 75, final_score_text.get_height()+60))
+    WIN.blit(score_text3, (WIDTH//2-score_text.get_width()//2+ 165, final_score_text.get_height()+60))
 
     pygame.draw.rect(WIN, GREEN, (75, 250, 300, 125), 5)
     pygame.draw.rect(WIN, RED, (WIDTH-375, 250, 300, 125), 5)
@@ -212,8 +219,8 @@ def handle_bullets(yellow_bullets, red_bullets, yellow, red):
 
 # main function that will start the game and keep it running until user exits
 def main():
-    red = pygame.Rect(700, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
-    yellow = pygame.Rect(100, 300, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+    red = pygame.Rect(700, 300, RED_SPACESHIP_WIDTH, RED_SPACESHIP_HEIGHT)
+    yellow = pygame.Rect(100, 300, YELLOW_SPACESHIP_WIDTH, YELLOW_SPACESHIP_HEIGHT)
 
     red_bullets = []
     yellow_bullets = []
