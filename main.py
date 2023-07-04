@@ -105,7 +105,7 @@ def draw_instructions():
 
     welcome_text1 = INSTRUCTION_TEXT.render("Welcome to outer space! Get ready to battle with a friend. Each", 1, WHITE)
     welcome_text2 = INSTRUCTION_TEXT.render("player will control a spaceship and shoot their bullets at the", 1, WHITE)
-    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person who's health first reaches 0 loses!", 1, WHITE)
+    welcome_text3 = INSTRUCTION_TEXT.render("other player. The person whose health first reaches 0 loses!", 1, WHITE)
     player1 = HEALTH_FONT.render("Player 1:", 1, PLAYER_YELLOW)
     player2 = HEALTH_FONT.render("Player 2:", 1, PLAYER_RED)
     player1_movement = CONTROLS_FONT.render("W, A, S, D  - Move Spaceship", 1, WHITE)
