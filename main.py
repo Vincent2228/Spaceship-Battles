@@ -13,7 +13,7 @@ pygame.display.set_caption("SPACESHIP BATTLES")
 # global variables stored for later use
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-GREY = (121, 134, 132)
+GREY = (24, 22, 29)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 GREEN = (30, 141, 68)
@@ -236,7 +236,7 @@ def yellow_handle_movement(keys_pressed, yellow):
     if keys_pressed[pygame.K_a] and (yellow.x - VELOCITY > 0):  # LEFT
         yellow.x -= VELOCITY
     if keys_pressed[pygame.K_d] and (
-        yellow.x + VELOCITY + yellow.width < BORDER.x
+        yellow.x + VELOCITY + yellow.width - 20 < BORDER.x
     ):  # RIGHT
         yellow.x += VELOCITY
     if keys_pressed[pygame.K_w] and (yellow.y - VELOCITY > 0):  # UP
@@ -339,6 +339,8 @@ def main():
                         and pos[1] >= 250
                         and pos[1] <= 375
                     ):
+                        yellow_bullets.clear()
+                        red_bullets.clear()
                         end = False
                         run = True
                         red_health = yellow_health = 10
