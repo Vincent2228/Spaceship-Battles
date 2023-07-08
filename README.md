@@ -5,6 +5,8 @@ This personal project is a local two-player game where you can challenge each ot
 the controls specified to control their spaceship. Players try to dodge each other's bullets while trying to hit the other player. The first
 player whose health reaches 0 loses.
 
+![](https://github.com/Vincent2228/Spaceship-Battles/blob/main/Assets/Space%20Shooters%20GIF.gif)
+
 ## Development
 This game was built using the Python pygame library. It is a very handy tool to build games such as this, and utilizing most of what the library
 offers was greatly interesting. Check out the code to see the details of it!
